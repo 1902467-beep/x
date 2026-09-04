@@ -1,0 +1,182 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+
+  --font-serif: var(--font-fraunces), Georgia, serif;
+  --font-sans: var(--font-plex-sans), system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), monospace;
+}
+
+:root {
+  color-scheme: dark;
+  /* Paleta "papel escuro" — 5 cores: fundo, tinta, mudo, linha, acento */
+  --background: #101010;
+  --foreground: #f2f1ee;
+  --card: #171715;
+  --card-foreground: #f2f1ee;
+  --popover: #171715;
+  --popover-foreground: #f2f1ee;
+  --primary: #f2f1ee;
+  --primary-foreground: #101010;
+  --secondary: #171715;
+  --secondary-foreground: #f2f1ee;
+  --muted: #171715;
+  --muted-foreground: #8c8c87;
+  --accent: #b9b7ac;
+  --accent-foreground: #101010;
+  --destructive: #c96f5e;
+  --border: #2b2b28;
+  --input: #2b2b28;
+  --ring: #b9b7ac;
+  --radius: 0rem;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+  ::selection {
+    background: var(--foreground);
+    color: var(--background);
+  }
+}
+
+/* ---------- Animações da intro ---------- */
+
+@keyframes intro-line-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes intro-word-up {
+  from {
+    transform: translateY(110%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes intro-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes intro-curtain-up {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+.intro-line {
+  transform-origin: left;
+  animation: intro-line-grow 0.9s cubic-bezier(0.65, 0, 0.35, 1) 0.15s both;
+}
+
+.intro-word {
+  animation: intro-word-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.intro-meta {
+  animation: intro-fade 0.6s ease 0.9s both;
+}
+
+.intro-exit {
+  animation: intro-curtain-up 0.8s cubic-bezier(0.76, 0, 0.24, 1) both;
+}
+
+/* ---------- Reveal ao rolar / entrada do hero ---------- */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0s);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- Expansão das fichas ---------- */
+
+.row-example {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.row-example[data-open='true'] {
+  grid-template-rows: 1fr;
+}
+
+.row-example > div {
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-line,
+  .intro-word,
+  .intro-meta,
+  .intro-exit {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .row-example {
+    transition: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
